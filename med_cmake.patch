@@ -1,0 +1,64 @@
+diff -rupN --no-dereference med-5.0.0/CMakeLists.txt med-5.0.0-new/CMakeLists.txt
+--- med-5.0.0/CMakeLists.txt	2023-06-06 16:58:35.000000000 +0200
++++ med-5.0.0-new/CMakeLists.txt	2024-10-25 10:22:44.573667388 +0200
+@@ -104,9 +104,9 @@ ENDIF(WIN32)
+ IF(WIN32 AND NOT CYGWIN)
+    SET(INSTALL_CMAKE_CONFIG_DIR cmake)
+ ELSE()
+-   SET(INSTALL_CMAKE_CONFIG_DIR share/cmake/medfile-${MED_STR_VERSION})
++   SET(INSTALL_CMAKE_CONFIG_DIR lib${LIB_SUFFIX}/cmake/MEDFile)
+ ENDIF()
+-SET(INSTALL_INCLUDE_DIR include)
++SET(INSTALL_INCLUDE_DIR include/med)
+ 
+ ## Pre-requisites detection
+ # Detect HDF5 first to potentially retrieve MPI automatically:
+@@ -147,8 +147,8 @@ ENDIF()
+ 
+ ## Installation of the doc
+ IF(MEDFILE_INSTALL_DOC  OR MEDFILE_BUILD_DOC)
+-  INSTALL(DIRECTORY doc/html.dox/ DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/med-fichier-${MED_STR_VERSION} REGEX "Makefile*" EXCLUDE PATTERN "*.am" EXCLUDE)
+-  INSTALL(DIRECTORY doc/gif doc/jpg doc/png DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/med-fichier-${MED_STR_VERSION} FILES_MATCHING PATTERN "*.gif" PATTERN "*.jpg" PATTERN "*.svg" PATTERN "*.png")
++  INSTALL(DIRECTORY doc/html.dox/ DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/med REGEX "Makefile*" EXCLUDE PATTERN "*.am" EXCLUDE)
++  INSTALL(DIRECTORY doc/gif doc/jpg doc/png DESTINATION ${CMAKE_INSTALL_PREFIX}/share/doc/med FILES_MATCHING PATTERN "*.gif" PATTERN "*.jpg" PATTERN "*.svg" PATTERN "*.png")
+ ENDIF()
+ 
+ #######################
+diff -rupN --no-dereference med-5.0.0/config/cmake_files/medMacros.cmake med-5.0.0-new/config/cmake_files/medMacros.cmake
+--- med-5.0.0/config/cmake_files/medMacros.cmake	2023-04-19 15:40:34.000000000 +0200
++++ med-5.0.0-new/config/cmake_files/medMacros.cmake	2024-10-25 10:22:44.573667388 +0200
+@@ -505,9 +505,9 @@ MACRO(INSTALL_AND_COMPILE_PYTHON_FILE PY
+   FOREACH(input ${PYFILE2COMPINST})
+     GET_FILENAME_COMPONENT(inputname ${input} NAME)
+     INSTALL(FILES ${input} DESTINATION ${CMAKE_INSTALL_PREFIX}/${PYFILELOC})
+-    INSTALL(CODE "MESSAGE(STATUS \"py compiling \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYFILELOC}/${inputname}\")")
+-    INSTALL(CODE "SET(CMD \"import py_compile ; py_compile.compile('\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYFILELOC}/${inputname}')\")")
+-    INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c \"\${CMD}\")")
+-    INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -O -c \"\${CMD}\")")
++#     INSTALL(CODE "MESSAGE(STATUS \"py compiling \$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYFILELOC}/${inputname}\")")
++#     INSTALL(CODE "SET(CMD \"import py_compile ; py_compile.compile('\$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/${PYFILELOC}/${inputname}')\")")
++#     INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c \"\${CMD}\")")
++#     INSTALL(CODE "EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -O -c \"\${CMD}\")")
+   ENDFOREACH(input ${PYFILE2COMPINST})
+ ENDMACRO(INSTALL_AND_COMPILE_PYTHON_FILE PYFILE2COMPINST PYFILELOC)
+diff -rupN --no-dereference med-5.0.0/python/CMakeLists.txt med-5.0.0-new/python/CMakeLists.txt
+--- med-5.0.0/python/CMakeLists.txt	2023-04-21 16:48:38.000000000 +0200
++++ med-5.0.0-new/python/CMakeLists.txt	2024-10-25 10:22:44.573667388 +0200
+@@ -36,7 +36,7 @@ SET(_link_libs
+   ${PYTHON_LIBRARIES}
+   )
+ 
+-SET(_install_dir lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages/med)
++SET(_install_dir lib${LIB_SUFFIX}/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages/med)
+ 
+ # Ensure we will be able to run the Python tests from the build tree by outputing
+ # files into the package folder:
+diff -rupN --no-dereference med-5.0.0/tools/medimport/CMakeLists.txt med-5.0.0-new/tools/medimport/CMakeLists.txt
+--- med-5.0.0/tools/medimport/CMakeLists.txt	2023-06-06 16:58:35.000000000 +0200
++++ med-5.0.0-new/tools/medimport/CMakeLists.txt	2024-10-25 10:22:44.573667388 +0200
+@@ -90,4 +90,4 @@ IF(NOT (WIN32 AND MEDFILE_BUILD_STATIC_L
+   INSTALL(TARGETS medimport DESTINATION bin )  
+ ENDIF()
+ 
+-INSTALL(FILES include/medimport_win_dll.h include/MEDimport.h include/MEDimport.hxx include/medimportcxx_win_dll.h DESTINATION include)
++INSTALL(FILES include/medimport_win_dll.h include/MEDimport.h include/MEDimport.hxx include/medimportcxx_win_dll.h DESTINATION ${INSTALL_INCLUDE_DIR})
