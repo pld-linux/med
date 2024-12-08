@@ -3,7 +3,9 @@ Name:		med
 Version:	5.0.0
 Release:	1
 License:	LGPL 3.0 / GPL v3
-Source0:	https://files.salome-platform.org/Salome/medfile/%{name}-%{version}.tar.bz2
+# wget gets 403 Forbidden, browser gets the file :/
+#Source0:	https://files.salome-platform.org/Salome/medfile/%{name}-%{version}.tar.bz2
+Source0:	%{name}-%{version}.tar.bz2
 # Source0-md5:	3c5ae8a37d7971658870b77caad1d73b
 URL:		https://www.salome-platform.org/
 Patch0:		%{name}_cmake.patch
