@@ -1,7 +1,7 @@
 Summary:	Library to exchange meshed data
 Name:		med
 Version:	5.0.0
-Release:	1
+Release:	2
 License:	LGPL 3.0 / GPL v3
 # wget gets 403 Forbidden, browser gets the file :/
 #Source0:	https://files.salome-platform.org/Salome/medfile/%{name}-%{version}.tar.bz2
